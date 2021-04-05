@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zillow.API", "Zillow.API\Zillow.API.csproj", "{7F583F47-06C7-4AE3-9247-DCEA4069F756}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zillow.Service", "Zillow.Service\Zillow.Service.csproj", "{7B11589F-F29D-4475-BDBA-57DCAC1F66C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zillow.Data", "Zillow.Data\Zillow.Data.csproj", "{53DC291C-C533-4381-A50D-9BC69C8C016B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zillow.Core", "Zillow.Core\Zillow.Core.csproj", "{D89E5D2B-3BA9-41ED-A58D-92E64C0133D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F583F47-06C7-4AE3-9247-DCEA4069F756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F583F47-06C7-4AE3-9247-DCEA4069F756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F583F47-06C7-4AE3-9247-DCEA4069F756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F583F47-06C7-4AE3-9247-DCEA4069F756}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B11589F-F29D-4475-BDBA-57DCAC1F66C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B11589F-F29D-4475-BDBA-57DCAC1F66C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B11589F-F29D-4475-BDBA-57DCAC1F66C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B11589F-F29D-4475-BDBA-57DCAC1F66C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53DC291C-C533-4381-A50D-9BC69C8C016B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53DC291C-C533-4381-A50D-9BC69C8C016B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53DC291C-C533-4381-A50D-9BC69C8C016B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53DC291C-C533-4381-A50D-9BC69C8C016B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D89E5D2B-3BA9-41ED-A58D-92E64C0133D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D89E5D2B-3BA9-41ED-A58D-92E64C0133D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D89E5D2B-3BA9-41ED-A58D-92E64C0133D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D89E5D2B-3BA9-41ED-A58D-92E64C0133D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41CA029C-5BF0-4B9B-938F-346844C2D432}
+	EndGlobalSection
+EndGlobal
