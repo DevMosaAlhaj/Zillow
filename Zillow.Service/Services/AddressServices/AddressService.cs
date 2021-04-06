@@ -70,9 +70,9 @@ namespace Zillow.Service.Services.AddressServices
             return createdAddress.Id;
         }
 
-        public async Task<int> Update(UpdateAddressDto dto, string userId)
+        public async Task<int> Update(int id,UpdateAddressDto dto, string userId)
         {
-            var oldAddress = await _dbContext.Address.SingleOrDefaultAsync(x => x.Id == dto.Id);
+            var oldAddress = await _dbContext.Address.SingleOrDefaultAsync(x => x.Id == id);
 
             var updatedAddress = _mapper.Map(dto,oldAddress);
 

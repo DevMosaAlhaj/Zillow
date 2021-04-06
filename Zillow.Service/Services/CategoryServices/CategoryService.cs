@@ -69,9 +69,9 @@ namespace Zillow.Service.Services.CategoryServices
             return createdCategory.Id;
         }
 
-        public async Task<int> Update( UpdateCategoryDto dto, string userId)
+        public async Task<int> Update(int id , UpdateCategoryDto dto, string userId)
         {
-            var oldCategory = await _dbContext.Category.SingleOrDefaultAsync(x => x.Id == dto.Id);
+            var oldCategory = await _dbContext.Category.SingleOrDefaultAsync(x => x.Id == id);
 
             var updatedCategory = _mapper.Map(dto, oldCategory);
 

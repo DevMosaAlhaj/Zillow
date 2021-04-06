@@ -60,9 +60,9 @@ namespace Zillow.Service.Services.CustomerServices
 
             return createdCustomer.Id;
         }
-        public async Task<int> Update( UpdateCustomerDto dto, string userId)
+        public async Task<int> Update(int id, UpdateCustomerDto dto, string userId)
         {
-            var oldCustomer = await _dbContext.Customer.SingleOrDefaultAsync(x => x.Id == dto.Id);
+            var oldCustomer = await _dbContext.Customer.SingleOrDefaultAsync(x => x.Id == id);
 
             var updatedCustomer = _mapper.Map(dto, oldCustomer);
 

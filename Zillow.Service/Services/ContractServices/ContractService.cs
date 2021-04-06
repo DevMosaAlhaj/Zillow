@@ -75,9 +75,9 @@ namespace Zillow.Service.Services.ContractServices
 
         }
 
-        public async Task<int> Update(UpdateContractDto dto, string userId)
+        public async Task<int> Update(int id ,UpdateContractDto dto, string userId)
         {
-            var oldContract = await _dbContext.Contract.SingleOrDefaultAsync(x => x.Id == dto.Id);
+            var oldContract = await _dbContext.Contract.SingleOrDefaultAsync(x => x.Id == id);
 
             var updatedContract = _mapper.Map(dto, oldContract);
 

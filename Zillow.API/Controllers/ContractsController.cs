@@ -18,35 +18,29 @@ namespace Zillow.API.Controllers
             _contractsService = contractsService;
         }
 
-        [HttpGet]
-        public IActionResult GetAll(int pageSize,int pageNo)
-            => GetResponse((() =>
+        [HttpGet("{page}/{pageSize}")]
+        public async Task<IActionResult> GetAll(int page,int pageSize)
+            => await GetResponse(async () =>
             new ApiResponseViewModel(true, "Get All Contracts Successfully",
-                _contractsService.GetAll(pageSize, pageNo))));
+                await _contractsService.GetAll(page, pageSize)));
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreateContractDto dto)
-        {
-            var res = await _contractsService.Create(dto, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Contract Created Successfully", res)));
-        }
+        => await GetResponse( async () =>
+            new ApiResponseViewModel(true, "Contract Created Successfully",
+                await _contractsService.Create(dto, UserId)));
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody]UpdateContractDto entity)
-        {
-            var res = await _contractsService.Update(entity, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Contract Updated Successfully", res)));
-        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id ,[FromBody]UpdateContractDto dto)
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Contract Updated Successfully",
+                await _contractsService.Update(id,dto, UserId)));
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-        {
-            var res = await _contractsService.Delete(id, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Contract Deleted Successfully", res)));
-        }
+        => await GetResponse( async () =>
+            new ApiResponseViewModel(true, "Contract Deleted Successfully",
+                await _contractsService.Delete(id, UserId)));
 
     }
 

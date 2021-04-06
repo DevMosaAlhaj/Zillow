@@ -19,35 +19,29 @@ namespace Zillow.API.Controllers
             _customerService = customerService;
         }
 
-        [HttpGet]
-        public IActionResult GetAll(int pageSize,int pageNo)
-        => GetResponse((() =>
+        [HttpGet("{page}/{pageSize}")]
+        public async Task<IActionResult> GetAll(int page,int pageSize)
+        => await GetResponse( async () =>
         new ApiResponseViewModel(true, "Get All Customers Successfully",
-            _customerService.GetAll(pageSize, pageNo))));
+             await _customerService.GetAll(page, pageSize)));
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreateCustomerDto dto)
-        {
-            var res= await _customerService.Create(dto, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Customer Created Successfully", res)));
-        }
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Customer Created Successfully",
+                await _customerService.Create(dto, UserId)));
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody]UpdateCustomerDto entity)
-        {
-            var res = await _customerService.Update(entity, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Customer Updated Successfully", res)));
-        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id ,[FromBody]UpdateCustomerDto dto)
+       => await GetResponse(async () =>
+           new ApiResponseViewModel(true, "Customer Updated Successfully",
+               await _customerService.Update(id,dto, UserId)));
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-        {
-            var res = await _customerService.Delete(id, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Customer Deleted Successfully", res)));
-        }
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Customer Deleted Successfully",
+                await _customerService.Delete(id, UserId)));
 
     }
 }

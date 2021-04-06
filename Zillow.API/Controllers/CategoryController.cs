@@ -18,37 +18,29 @@ namespace Zillow.API.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet]
-        public IActionResult GetAll(int pageSize, int pageNo)
-            => GetResponse((() =>
+        [HttpGet("{page}/{pageSize}")]
+        public async Task<IActionResult> GetAll(int page, int pageSize)
+            => await GetResponse(async () =>
                 new ApiResponseViewModel(true, "Get All Categories Successfully",
-                    _categoryService.GetAll(pageSize, pageNo))));
+                     await _categoryService.GetAll(page, pageSize)));
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreateCategoryDto dto)
-        {
-            var res = await _categoryService.Create(dto, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Category Created Successfully",res)));
-        }
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Category Created Successfully",
+                await _categoryService.Create(dto, UserId)));
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody]UpdateCategoryDto entity)
-        {
-            var res = await _categoryService.Update(entity, UserId);
-            
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Category Updated Successfully")));
-        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id ,[FromBody]UpdateCategoryDto dto)
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Category Updated Successfully",
+                await _categoryService.Update(id , dto, UserId)));
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-        {
-            var res = await _categoryService.Delete(id, UserId);
-            
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Category Deleted Successfully")));
-        }
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Category Deleted Successfully",
+                await _categoryService.Delete(id, UserId)));
 
     }
 }

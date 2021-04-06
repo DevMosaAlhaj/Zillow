@@ -13,7 +13,7 @@ namespace Zillow.Service.Services.ContractServices
 
       Task<ContractViewModel> Get(int id);
       Task<int> Create(CreateContractDto dto, string userId);
-      Task<int> Update(UpdateContractDto dto, string userId);
+      Task<int> Update(int id ,UpdateContractDto dto, string userId);
       Task<int> Delete(int id, string userId);
   }
 }

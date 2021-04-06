@@ -13,7 +13,7 @@ namespace Zillow.Service.Services.AddressServices
 
         Task<AddressViewModel> Get(int id);
         Task<int> Create(CreateAddressDto dto, string userId);
-        Task<int> Update(UpdateAddressDto dto, string userId);
+        Task<int> Update(int id,UpdateAddressDto dto, string userId);
         Task<int> Delete(int id, string userId);
     }
 }

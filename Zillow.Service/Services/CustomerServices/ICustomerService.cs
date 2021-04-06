@@ -11,7 +11,7 @@ namespace Zillow.Service.Services.CustomerServices
         Task<PagingViewModel> GetAll(int page, int pageSize);
         Task<CustomerViewModel> Get(int id);
         Task<int> Create(CreateCustomerDto dto, string userId);
-        Task<int> Update(UpdateCustomerDto dto, string userId);
+        Task<int> Update(int id,UpdateCustomerDto dto, string userId);
         Task<int> Delete(int id, string userId);
     }
 }

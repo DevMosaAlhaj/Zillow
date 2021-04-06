@@ -19,34 +19,28 @@ namespace Zillow.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll(int pageSize, int pageNo)
-            => GetResponse((() =>
+        public async Task<IActionResult> GetAll(int page, int pageSize)
+            => await GetResponse(async () =>
                 new ApiResponseViewModel(true, "Get All Real Estates Successfully",
-                    _realEstatesService.GetAll(pageSize, pageNo))));
+                     await _realEstatesService.GetAll(page, pageSize)));
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRealEstatesDto dto)
-        {
-            var res = await _realEstatesService.Create(dto,UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Real Estate Created Successfully", res)));
-        }
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Real Estate Created Successfully",
+                await _realEstatesService.Create(dto,UserId)));
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody]UpdateRealEstatesDto entity)
-        {
-            var res = await _realEstatesService.Update(entity, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Real Estate Updated Successfully", res)));
-        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id ,[FromBody]UpdateRealEstatesDto dto)
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Real Estate Updated Successfully",
+                await _realEstatesService.Update(id,dto, UserId)));
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-        {
-            var res=await _realEstatesService.Delete(id, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Real Estate Deleted Successfully", res)));
-        }
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Real Estate Deleted Successfully",
+                await _realEstatesService.Delete(id, UserId)));
 
     }
 }

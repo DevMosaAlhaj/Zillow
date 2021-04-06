@@ -13,7 +13,7 @@ namespace Zillow.Service.Services.CategoryServices
 
         Task<CategoryViewModel> Get(int id);
         Task<int> Create(CreateCategoryDto dto, string userId);
-        Task<int> Update( UpdateCategoryDto dto, string userId);
+        Task<int> Update( int id , UpdateCategoryDto dto, string userId);
         Task<int> Delete(int id, string userId);
     }
 }

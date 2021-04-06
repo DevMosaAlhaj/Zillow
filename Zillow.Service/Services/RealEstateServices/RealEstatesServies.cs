@@ -51,10 +51,10 @@ namespace Zillow.Service.Services.RealEstateServices
         }
         public async Task<RealEstateViewModel> Get(int id)
         {
-            var RealEstate = await _dbContext.RealEstate.Include(x => x.Category).Include(x => x.Address)
+            var realEstate = await _dbContext.RealEstate.Include(x => x.Category).Include(x => x.Address)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
-            return _mapper.Map<RealEstateViewModel>(RealEstate);
+            return _mapper.Map<RealEstateViewModel>(realEstate);
         }
         public async Task<int> Create(CreateRealEstatesDto dto, string userId)
         {
@@ -67,9 +67,9 @@ namespace Zillow.Service.Services.RealEstateServices
 
             return createdRealEstate.Id;
         }
-        public async Task<int> Update(UpdateRealEstatesDto dto, string userId)
+        public async Task<int> Update(int id ,UpdateRealEstatesDto dto, string userId)
         {
-            var oldRealEstate = await _dbContext.RealEstate.SingleOrDefaultAsync(x => x.Id == dto.Id);
+            var oldRealEstate = await _dbContext.RealEstate.SingleOrDefaultAsync(x => x.Id == id);
 
             var updatedRealEstate = _mapper.Map(dto, oldRealEstate);
 

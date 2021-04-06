@@ -5,6 +5,7 @@ using Zillow.Core.Dto.CreateDto;
 using Zillow.Core.ViewModel;
 using Zillow.Service.Services.UserServices;
 using Microsoft.AspNetCore.Authorization;
+using Zillow.Core.Dto.UpdateDto;
 
 namespace Zillow.API.Controllers
 {
@@ -18,22 +19,30 @@ namespace Zillow.API.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
-            => GetResponse((() =>
-                new ApiResponseViewModel(true, "Get All Users Successfully",
-                    _userService.GetAll())));
-
+        [HttpGet("{page}/{pageSize}")]
+        public async Task<IActionResult> GetAll(int page, int pageSize)
+            => await GetResponse(async () =>
+                new ApiResponseViewModel(true, "Get All Users",
+                    await _userService.GetAll(page, pageSize)));
+        
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody]CreateUserDto dto)
-        {
-            await _userService.Register(dto);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "User Created Successfully")));
-        }
-
- 
+            => await GetResponse(async () =>
+                new ApiResponseViewModel(true, "User Created Successfully",
+                    await _userService.Create(dto)));
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id,[FromBody]UpdateUserDto dto)
+            => await GetResponse(async () =>
+                new ApiResponseViewModel(true, "User Updated Successfully",
+                    await _userService.Update(id,dto,UserId)));
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id)
+            => await GetResponse(async () =>
+                new ApiResponseViewModel(true, "User Deleted Successfully",
+                    await _userService.Delete(id,UserId)));
 
     }
 }

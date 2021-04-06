@@ -13,44 +13,37 @@ namespace Zillow.API.Controllers
     
     public class AddressController : BaseController
     {
-        private IAddressService _AddressService;
+        private readonly IAddressService _addressService;
        
-        public AddressController(IAddressService AddressService)
+        public AddressController(IAddressService addressService)
         {
-            _AddressService = AddressService;
+            _addressService = addressService;
             
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll(int pageSize, int pageNo)
+        [HttpGet("{page}/{pageSize}")]
+        public async Task<IActionResult> GetAll(int page, int pageSize)
         => await GetResponse(async ()
-            => new ApiResponseViewModel(true, "", await _AddressService.GetAll(pageNo, pageSize)));
+            => new ApiResponseViewModel(true, "Get All Address Successfully",
+                await _addressService.GetAll(page, pageSize)));
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreateAddressDto dto)
-        {
+        => await GetResponse( async () =>
+            new ApiResponseViewModel(true, "Address Created Successfully",
+                await _addressService.Create(dto, UserId)));
 
-           var res=await _AddressService.Create(dto, UserId);
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id,[FromBody]UpdateAddressDto dto)
+        => await GetResponse(async () =>
+            new ApiResponseViewModel(true, "Address Updated Successfully",
+                await _addressService.Update(id,dto, UserId)));
 
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Address Created Successfully", res)));
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody]UpdateAddressDto dto)
-        {
-            var res = await _AddressService.Update(dto, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Address Updated Successfully", res)));
-        }
-
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-        {
-            var res = await _AddressService.Delete(id, UserId);
-            return GetResponse((() =>
-                new ApiResponseViewModel(true, "Address Deleted Successfully", res)));
-        }
+       => await GetResponse(async () =>
+           new ApiResponseViewModel(true, "Address Deleted Successfully",
+               await _addressService.Delete(id, UserId)));
 
     }
 }

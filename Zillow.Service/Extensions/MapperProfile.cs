@@ -61,6 +61,7 @@ namespace Zillow.Service.Extensions
                 .ForAllMembers(otp=> 
                     otp.Condition((src,destination,srcMember)=> srcMember!=null));
             CreateMap<UpdateUserDto, UserDbEntity>()
+                .ForMember(x=> x.Email , otp=> otp.Ignore())
                 .ForAllMembers(otp=> 
                     otp.Condition((src,destination,srcMember)=> srcMember!=null));
 
