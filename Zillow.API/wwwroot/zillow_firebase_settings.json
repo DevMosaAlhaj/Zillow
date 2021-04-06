@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "zillow-b7f31",
+  "private_key_id": "8b4957ed7c4459b08ec82de85fe91216333f31e9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCoLo8FzlasDZOH\nl9XM0QRugb10ul5LS3TawAAYfWVkV/C5mp5FmMywLKQpFAmtRWAbF7GN7U9+n5xF\nQ5uuDRvqNS0THKZ0LOaO6CdN+PtF6jBI5vUUlgoi5NqV7MyVjIK13tOcqLtsqMD3\n8M1fp9V0Cb+D+pwAIa9gkEmKPhzzpMWI3oxB8FUvQFCA3XfhyxdpP5e7w5+cY7xB\nRcCZmCPvHPmrNEns9QQLjXsI1ybbp60waAwQvgYRZKGe/iY0eYwU745HRvN9+1X6\nphUpK4fv7mtdUgN6a2FNzjI7w2rTfEZ0LhW1qu5bH+4JN4JVRh9k93kYYmhua35r\nlg064lF/AgMBAAECggEAQQy1FA1Rl72ujNkNAGnt+WIkKdR16VCXs45k2xQRVgTv\nnpJv2kJ2FURHAH54GbVGLWR2MAuUXkkU8/No8SKv4+BKfWRs+21sheTEYxPE+K9S\nmrf+HkbER+fVpfyPyt4spnS3y5W13JrO/Hd+sBtl47prgXw6v5BH2aUlVJuerhux\nvgYITFVdpojyG2mcPK0wJ30vF5HH3xOWbiTm+/YBeZJQswYmPQY/f6W65p5/ysHL\nEFQXLhYuHHUqJxQSWKlmzQU7A9anVhiFYhHUy9WB/3EVCdV7WFQYgzK8nz/u6jTO\nl2Q2V/tt1RuRA/eCGCOOK71lsmmNNNfNIMhcxB08mQKBgQDfHBmzPCX6f1KUpvlS\nCxdxV5qBM5IVztxJvXFIj2ImD3QD80VBgfCt0QoT0BQBcO7T3hqD/VNQFxRW0F6P\nP0O4EQiV9/CEu1X/QNIAav0E/yuz90xeS652NyhpGHGtm/x5onUNqSlcXFiVPXcL\nvbHrbKH6Zf1XXJ92hYFqM8XpSQKBgQDA+YtQdl1g+ZiuirN304a78SmRl+yge2mr\ncmusT0y8W/kvbp1sazGdzs2GowmQWEUahVPdGW/4daR6aZGAhSRNJq22S7H1yMrs\nWEm8/oK4b8Cdr8/Qilk7BVMuU8PB87DaoL5Z8k0Lz8Xdt2bSbYeBUnBA4F0pr/sf\nsRCbU83shwKBgQDaGvtYx00NQ9iz70M+HA+vwocNFSATZ6TcBXEwENNPB75PekrS\nzjc9hGQImFpmSkN/JNng/A2s9tLwR0SZXqxRzX0KNlaPOx/Hp1NkCzML5nOPvAqR\nCAUmFafQjY/buuim89TgJOWFH9WNF4hAFxJOZmU2huuRsr9EuyCXdMNd2QKBgC3u\nd7F0Ku+9GRFaZDM+PtCXK0zDO4hLN7CeMHC4A0zGG36ltoSq0wl7wsGsJsebqv8Q\nAxEaT+N0pOyaGg7cIfLXJPvB8p7M5zfwH8UDUzvxJYii4zUA6RI6Rz08pNiSV2MC\nZaxlFt+b2b3XPHsTpPAsHhnjDWmxwHUfoRNHlDkbAoGBAKbijCIyp6jw03T4SXR0\nzFQvKAdOmqZo5KRSJvKqL0bBJ7dSaHhJySiYXwQHKJ4aUNXo/H6D330Ph3yt7hul\nR2AiFR9CFmvvGRX7JjZee3iblToE1VkuPlNlCb9cKkaJjY0m05Jr9DCjWTU0x4Ce\n5CSIG4UZsoaZTe5PttEhjCko\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-vipvk@zillow-b7f31.iam.gserviceaccount.com",
+  "client_id": "111520746380326879316",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-vipvk%40zillow-b7f31.iam.gserviceaccount.com"
+}

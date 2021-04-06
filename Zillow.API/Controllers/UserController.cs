@@ -1,5 +1,4 @@
-﻿using Zillow.Core.Dto;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Zillow.Core.Dto.CreateDto;
 using Zillow.Core.ViewModel;
@@ -38,8 +37,8 @@ namespace Zillow.API.Controllers
                 new ApiResponseViewModel(true, "User Updated Successfully",
                     await _userService.Update(id,dto,UserId)));
         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
             => await GetResponse(async () =>
                 new ApiResponseViewModel(true, "User Deleted Successfully",
                     await _userService.Delete(id,UserId)));

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.OpenApi.Models;
 using Zillow.Data.Data;
 using Zillow.Data.DbEntity;
@@ -12,6 +13,8 @@ using Zillow.Service.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Zillow.Core.Options;
 using Microsoft.AspNetCore.Identity;
 
@@ -143,11 +146,16 @@ namespace Zillow.API
             app.UseRouting();
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/ApiDocs/swagger.json", "CMS API"); });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/ApiDocs/swagger.json", "Zillow API"); });
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile(Path.Combine(env.WebRootPath,"zillow_firebase_settings.json"))
+            });
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
