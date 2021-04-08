@@ -25,6 +25,12 @@ namespace Zillow.API.Controllers
         new ApiResponseViewModel(true, "Get All Customers Successfully",
              await _customerService.GetAll(page, pageSize)));
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+            => await GetResponse(async () =>
+                new ApiResponseViewModel(true, "Get Customer Successfully",
+                    await _customerService.Get(id)));
+        
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreateCustomerDto dto)
         => await GetResponse(async () =>

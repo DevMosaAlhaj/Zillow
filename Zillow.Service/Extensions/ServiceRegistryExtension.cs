@@ -5,6 +5,7 @@ using Zillow.Service.Services.CategoryServices;
 using Zillow.Service.Services.ContractServices;
 using Zillow.Service.Services.CustomerServices;
 using Zillow.Service.Services.FileServices;
+using Zillow.Service.Services.ImageServices;
 using Zillow.Service.Services.RealEstateServices;
 using Zillow.Service.Services.UserServices;
 
@@ -28,6 +29,8 @@ namespace Zillow.Service.Extensions
             service.AddScoped<IAddressService, AddressService>();
 
             service.AddScoped<IAuthService, AuthService>();
+            
+            service.AddScoped<IImageService, ImageService>();
                 
             service.AddSingleton<IFileService,FileService>();
             

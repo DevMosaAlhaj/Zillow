@@ -24,6 +24,13 @@ namespace Zillow.API.Controllers
                 new ApiResponseViewModel(true, "Get All Users",
                     await _userService.GetAll(page, pageSize)));
         
+        
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Get(string id)
+            => await GetResponse(async () =>
+                new ApiResponseViewModel(true, "Get User Successfully",
+                    await _userService.Get(id)));
+        
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody]CreateUserDto dto)

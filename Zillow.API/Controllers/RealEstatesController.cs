@@ -18,11 +18,17 @@ namespace Zillow.API.Controllers
             _realEstatesService = realEstatesService;
         }
 
-        [HttpGet]
+        [HttpGet("{page}/{pageSize}")]
         public async Task<IActionResult> GetAll(int page, int pageSize)
             => await GetResponse(async () =>
                 new ApiResponseViewModel(true, "Get All Real Estates Successfully",
                      await _realEstatesService.GetAll(page, pageSize)));
+        
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Get(int id)
+            => await GetResponse(async () =>
+                new ApiResponseViewModel(true, "Get Real Estate Successfully",
+                    await _realEstatesService.Get(id)));
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRealEstatesDto dto)
