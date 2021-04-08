@@ -131,7 +131,7 @@ namespace Zillow.Service.Services.AuthServices
              },
              out var validatedToken);
 
-            var userId = principal.Claims.SingleOrDefault(x=> x.Type == JwtRegisteredClaimNames.NameId).Value;
+            var userId = principal.Claims.SingleOrDefault(x=> x.Type == JwtRegisteredClaimNames.NameId)?.Value;
 
             var user = await _userManager.FindByIdAsync(userId);
 
@@ -148,6 +148,9 @@ namespace Zillow.Service.Services.AuthServices
         {
             var user =  _dbContext.Users.SingleOrDefault(x => x.RefreshToken == refreshToken);
 
+            if (user == null) // Throw RefreshFailureException
+                return null;
+            
             return new LoginResponseViewModel()
             {
                 TokenViewModel = await GenerationAccessToken(user),
