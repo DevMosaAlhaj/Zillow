@@ -6,6 +6,7 @@ using Zillow.Service.Services.ContractServices;
 using Zillow.Service.Services.CustomerServices;
 using Zillow.Service.Services.FileServices;
 using Zillow.Service.Services.ImageServices;
+using Zillow.Service.Services.NotificationServices;
 using Zillow.Service.Services.RealEstateServices;
 using Zillow.Service.Services.UserServices;
 
@@ -33,6 +34,8 @@ namespace Zillow.Service.Extensions
             service.AddScoped<IImageService, ImageService>();
                 
             service.AddSingleton<IFileService,FileService>();
+            
+            service.AddSingleton<INotificationService,NotificationService>();
             
             return service;
         }

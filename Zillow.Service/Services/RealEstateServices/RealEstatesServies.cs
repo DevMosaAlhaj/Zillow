@@ -11,6 +11,7 @@ using Zillow.Core.ViewModel;
 using Zillow.Data.Data;
 using Zillow.Data.DbEntity;
 using Zillow.Service.Services.FileServices;
+using Zillow.Service.Services.NotificationServices;
 
 namespace Zillow.Service.Services.RealEstateServices
 {
@@ -18,13 +19,15 @@ namespace Zillow.Service.Services.RealEstateServices
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
-        private IFileService _fileService;
+        private readonly IFileService _fileService;
+        private readonly INotificationService _notificationService;
 
-        public RealEstatesService(ApplicationDbContext dbContext, IMapper mapper, IFileService fileService)
+        public RealEstatesService(ApplicationDbContext dbContext, IMapper mapper, IFileService fileService, INotificationService notificationService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _fileService = fileService;
+            _notificationService = notificationService;
         }
 
         public async Task<PagingViewModel> GetAll(int page, int pageSize)
@@ -65,8 +68,38 @@ namespace Zillow.Service.Services.RealEstateServices
             await _dbContext.RealEstate.AddAsync(createdRealEstate);
             await _dbContext.SaveChangesAsync();
 
+            await SendNotificationToUsers(createdRealEstate);
+            
             return createdRealEstate.Id;
         }
+
+        private async Task SendNotificationToUsers(RealEstateDbEntity realEstate)
+        {
+            var usersFcmToken = await _dbContext.Users
+                .Where(x => !string.IsNullOrEmpty(x.FcmToken))
+                .Select(x => x.FcmToken).ToListAsync();
+
+            var messageBody = $"{realEstate.Name}" +
+                              $"Added in {realEstate.Address}" +
+                              $"\n {realEstate.Description}" +
+                              $"At {realEstate.CreatedAt}";
+
+            var authorName = await _dbContext.Users
+                .SingleOrDefaultAsync(x => x.Id.Equals(realEstate.CreatedBy));
+
+            var messageDto = new CreateMessageDto()
+            {
+                Title = $"New Post From {authorName.FirstName}",
+                Body = messageBody,
+                Action = "NewRealEstate",
+                ActionId = realEstate.Id
+            };
+
+            var messages = _notificationService.CreateNotifications(messageDto, usersFcmToken);
+
+            await _notificationService.PushNotifications(messages);
+        }
+
         public async Task<int> Update(int id ,UpdateRealEstatesDto dto, string userId)
         {
             var oldRealEstate = await _dbContext.RealEstate.SingleOrDefaultAsync(x => x.Id == id);

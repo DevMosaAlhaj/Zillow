@@ -17,6 +17,7 @@ namespace Zillow.Data.Data
             base.OnModelCreating(builder);
 
             builder.ApplyEntitiesConstrains();
+            
         }
 
         public DbSet<AddressDbEntity> Address { get; set; }
