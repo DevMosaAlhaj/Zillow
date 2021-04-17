@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Zillow.Core.Constant;
 using Zillow.Core.Dto.CreateDto;
 using Zillow.Core.Dto.UpdateDto;
+using Zillow.Core.Exceptions;
 using Zillow.Core.ViewModel;
 using Zillow.Data.Data;
 using Zillow.Data.DbEntity;
@@ -18,12 +20,14 @@ namespace Zillow.Service.Services.ImageServices
         private readonly ApplicationDbContext _dbContext;
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;
+        private readonly EntityNotFoundException _notFoundException;
 
         public ImageService(ApplicationDbContext dbContext, IFileService fileService, IMapper mapper)
         {
             _dbContext = dbContext;
             _fileService = fileService;
             _mapper = mapper;
+            _notFoundException = new EntityNotFoundException("Image");
         }
 
         public async Task<PagingViewModel> GetAll(int page, int pageSize)
@@ -54,6 +58,9 @@ namespace Zillow.Service.Services.ImageServices
             var image = await _dbContext.Images
                 .Include(x => x.RealEstate)
                 .SingleOrDefaultAsync(x => x.Id == id);
+
+            if (image == null) throw _notFoundException;
+            
             return _mapper.Map<ImageViewModel>(image);
         }
 
@@ -74,6 +81,11 @@ namespace Zillow.Service.Services.ImageServices
         {
             var oldImage = await _dbContext.Images.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (oldImage == null) throw _notFoundException;
+            
+            if (id != dto.Id)
+                throw new UpdateEntityException(ExceptionMessage.UpdateEntityIdError);
+            
             var updatedImage = _mapper.Map(dto, oldImage);
 
             updatedImage.UpdatedAt = DateTime.Now;
@@ -90,6 +102,8 @@ namespace Zillow.Service.Services.ImageServices
         {
             var deletedImage = await _dbContext.Images.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (deletedImage == null) throw _notFoundException;
+            
             deletedImage.UpdatedAt = DateTime.Now;
             deletedImage.UpdatedBy = userId;
             deletedImage.IsDelete = true;

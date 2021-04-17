@@ -17,6 +17,7 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Zillow.Core.Options;
 using Microsoft.AspNetCore.Identity;
+using Zillow.Core.Extenstion;
 
 namespace Zillow.API
 {
@@ -47,6 +48,7 @@ namespace Zillow.API
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
+                    options.User.RequireUniqueEmail = true;
                 }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -155,6 +157,8 @@ namespace Zillow.API
             {
                 Credential = GoogleCredential.FromFile(Path.Combine(env.WebRootPath,"zillow_firebase_settings.json"))
             });
+
+            app.UseAppMiddlewares();
             
             app.UseEndpoints(endpoints =>
             {

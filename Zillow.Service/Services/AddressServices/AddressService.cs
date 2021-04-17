@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Zillow.Core.Constant;
 using Zillow.Core.Dto.CreateDto;
 using Zillow.Core.Dto.UpdateDto;
+using Zillow.Core.Exceptions;
 using Zillow.Core.ViewModel;
 using Zillow.Data.Data;
 using Zillow.Data.DbEntity;
@@ -17,11 +19,13 @@ namespace Zillow.Service.Services.AddressServices
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly EntityNotFoundException _notFoundException;
 
         public AddressService(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _notFoundException = new EntityNotFoundException("Address");
         }
 
 
@@ -54,10 +58,12 @@ namespace Zillow.Service.Services.AddressServices
             var address = await _dbContext.Address
                 .Include(x => x.RealEstates)
                 .SingleOrDefaultAsync(x => x.Id == id);
-            
+
+            if (address == null) throw _notFoundException;
+
             return _mapper.Map<AddressViewModel>(address);
         }
-        
+
         public async Task<int> Create(CreateAddressDto dto, string userId)
         {
             var createdAddress = _mapper.Map<AddressDbEntity>(dto);
@@ -70,11 +76,16 @@ namespace Zillow.Service.Services.AddressServices
             return createdAddress.Id;
         }
 
-        public async Task<int> Update(int id,UpdateAddressDto dto, string userId)
+        public async Task<int> Update(int id, UpdateAddressDto dto, string userId)
         {
             var oldAddress = await _dbContext.Address.SingleOrDefaultAsync(x => x.Id == id);
 
-            var updatedAddress = _mapper.Map(dto,oldAddress);
+            if (oldAddress == null) throw _notFoundException;
+
+            if (id != dto.Id)
+                throw new UpdateEntityException(ExceptionMessage.UpdateEntityIdError);
+            
+            var updatedAddress = _mapper.Map(dto, oldAddress);
 
             updatedAddress.UpdatedAt = DateTime.Now;
             updatedAddress.UpdatedBy = userId;
@@ -88,6 +99,8 @@ namespace Zillow.Service.Services.AddressServices
         public async Task<int> Delete(int id, string userId)
         {
             var deletedAddress = await _dbContext.Address.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (deletedAddress == null) throw _notFoundException;
 
             deletedAddress.UpdatedAt = DateTime.Now;
             deletedAddress.UpdatedBy = userId;

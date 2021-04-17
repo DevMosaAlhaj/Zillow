@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Zillow.Core.Constant;
 using Zillow.Core.Dto.CreateDto;
 using Zillow.Core.Dto.UpdateDto;
+using Zillow.Core.Exceptions;
 using Zillow.Data.Data;
 using Zillow.Data.DbEntity;
 
@@ -17,11 +19,13 @@ namespace Zillow.Service.Services.CategoryServices
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly EntityNotFoundException _notFoundException;
 
         public CategoryService(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _notFoundException = new EntityNotFoundException("Category");
         }
 
         public async Task<PagingViewModel> GetAll(int page, int pageSize)
@@ -52,7 +56,9 @@ namespace Zillow.Service.Services.CategoryServices
         {
             var category = await _dbContext.Category
                 .Include(x => x.RealEstates)
-                .SingleOrDefaultAsync(x=> x.Id == id);
+                .SingleOrDefaultAsync(x => x.Id == id);
+
+            if (category == null) throw _notFoundException;
 
             return _mapper.Map<CategoryViewModel>(category);
         }
@@ -69,10 +75,15 @@ namespace Zillow.Service.Services.CategoryServices
             return createdCategory.Id;
         }
 
-        public async Task<int> Update(int id , UpdateCategoryDto dto, string userId)
+        public async Task<int> Update(int id, UpdateCategoryDto dto, string userId)
         {
             var oldCategory = await _dbContext.Category.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (oldCategory == null) throw _notFoundException;
+
+            if (id != dto.Id)
+                throw new UpdateEntityException(ExceptionMessage.UpdateEntityIdError);
+            
             var updatedCategory = _mapper.Map(dto, oldCategory);
 
             updatedCategory.UpdatedAt = DateTime.Now;
@@ -88,13 +99,15 @@ namespace Zillow.Service.Services.CategoryServices
         {
             var deletedCategory = await _dbContext.Category.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (deletedCategory == null) throw _notFoundException;
+
             deletedCategory.UpdatedAt = DateTime.Now;
             deletedCategory.UpdatedBy = userId;
             deletedCategory.IsDelete = true;
 
             _dbContext.Category.Update(deletedCategory);
             await _dbContext.SaveChangesAsync();
-            
+
             return deletedCategory.Id;
         }
     }

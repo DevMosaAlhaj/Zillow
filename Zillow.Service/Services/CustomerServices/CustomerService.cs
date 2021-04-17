@@ -10,6 +10,8 @@ using Zillow.Data.DbEntity;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Zillow.Core.Constant;
+using Zillow.Core.Exceptions;
 
 namespace Zillow.Service.Services.CustomerServices
 {
@@ -17,10 +19,12 @@ namespace Zillow.Service.Services.CustomerServices
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly EntityNotFoundException _notFoundException;
         public CustomerService(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _notFoundException = new EntityNotFoundException("Customer");
         }
         public async Task<PagingViewModel> GetAll(int page, int pageSize)
         {
@@ -44,10 +48,12 @@ namespace Zillow.Service.Services.CustomerServices
         }
         public async Task<CustomerViewModel> Get(int id)
         {
-            var Customer = await _dbContext.Customer
+            var customer = await _dbContext.Customer
                 .SingleOrDefaultAsync(x => x.Id == id);
 
-            return _mapper.Map<CustomerViewModel>(Customer);
+            if (customer == null) throw _notFoundException;
+
+                return _mapper.Map<CustomerViewModel>(customer);
         }
         public async Task<int> Create(CreateCustomerDto dto, string userId)
         {
@@ -64,6 +70,11 @@ namespace Zillow.Service.Services.CustomerServices
         {
             var oldCustomer = await _dbContext.Customer.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (oldCustomer == null) throw _notFoundException;
+            
+            if (id != dto.Id)
+                throw new UpdateEntityException(ExceptionMessage.UpdateEntityIdError);
+            
             var updatedCustomer = _mapper.Map(dto, oldCustomer);
 
             updatedCustomer.UpdatedAt = DateTime.Now;
@@ -78,6 +89,8 @@ namespace Zillow.Service.Services.CustomerServices
         {
             var deletedCustomer = await _dbContext.Customer.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (deletedCustomer == null) throw _notFoundException;
+            
             deletedCustomer.UpdatedAt = DateTime.Now;
             deletedCustomer.UpdatedBy = userId;
             deletedCustomer.IsDelete = true;

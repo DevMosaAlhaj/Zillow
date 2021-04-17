@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Zillow.Core.Exceptions;
 
 namespace Zillow.Service.Services.FileServices
 {
@@ -18,7 +19,8 @@ namespace Zillow.Service.Services.FileServices
         public async Task<string> SaveFile(IFormFile file,string folderName)
         {
             string fileName = null;
-            if (file == null || file.Length <= 0) return null; // Trow EmptyFileException
+            if (file == null || file.Length <= 0) throw new EmptyFileException();
+            
             var uploadPath = Path.Combine(_env.WebRootPath, folderName);
             
             if (!Directory.Exists(uploadPath))

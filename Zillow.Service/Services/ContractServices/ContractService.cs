@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Zillow.Core.Constant;
 using Zillow.Core.Dto;
 using Zillow.Core.Dto.CreateDto;
 using Zillow.Core.Dto.UpdateDto;
 using Zillow.Core.Enum;
+using Zillow.Core.Exceptions;
 using Zillow.Core.ViewModel;
 using Zillow.Data.Data;
 using Zillow.Data.DbEntity;
@@ -20,11 +22,13 @@ namespace Zillow.Service.Services.ContractServices
 
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly EntityNotFoundException _notFoundException;
 
         public ContractService(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _notFoundException = new EntityNotFoundException("Contract");
         }
 
         public async Task<PagingViewModel> GetAll(int page, int pageSize)
@@ -59,7 +63,9 @@ namespace Zillow.Service.Services.ContractServices
                 .Include(x => x.RealEstate)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
-            return _mapper.Map<ContractViewModel>(contract);
+            if (contract == null) throw _notFoundException;
+
+                return _mapper.Map<ContractViewModel>(contract);
         }
 
         public async Task<int> Create(CreateContractDto dto, string userId)
@@ -79,6 +85,11 @@ namespace Zillow.Service.Services.ContractServices
         {
             var oldContract = await _dbContext.Contract.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (oldContract == null) throw _notFoundException;
+            
+            if (id != dto.Id)
+                throw new UpdateEntityException(ExceptionMessage.UpdateEntityIdError);
+            
             var updatedContract = _mapper.Map(dto, oldContract);
 
             updatedContract.UpdatedAt = DateTime.Now;
@@ -94,6 +105,8 @@ namespace Zillow.Service.Services.ContractServices
         {
             var deletedContract = await _dbContext.Contract.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (deletedContract == null) throw _notFoundException;
+            
             deletedContract.UpdatedAt = DateTime.Now;
             deletedContract.UpdatedBy = userId;
             deletedContract.IsDelete = true;

@@ -10,11 +10,11 @@ namespace Zillow.Service.Services.AuthServices
 
         Task<LoginResponseViewModel> Login(LoginDto dto);
 
-        Task<string> Logout(string token);
+        Task<string> Logout(string userId);
 
-        Task<LoginResponseViewModel> RefreshToken(string refreshToken);
+        LoginResponseViewModel RefreshToken(string refreshToken);
 
-        Task<TokenViewModel> GenerationAccessToken(UserDbEntity user);
+        TokenViewModel GenerationAccessToken(UserDbEntity user);
 
         Task<string> RegisterFcmToken(string userId, string userFcmToken);
 
