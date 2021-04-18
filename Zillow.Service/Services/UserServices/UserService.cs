@@ -13,6 +13,7 @@ using Zillow.Core.Dto.UpdateDto;
 using Zillow.Core.Exceptions;
 using Zillow.Data.Data;
 using Zillow.Data.DbEntity;
+using Zillow.Service.Services.EmailServices;
 
 namespace Zillow.Service.Services.UserServices
 {
@@ -21,13 +22,16 @@ namespace Zillow.Service.Services.UserServices
         private readonly UserManager<UserDbEntity> _manager;
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
         private readonly EntityNotFoundException _notFoundException;
 
-        public UserService(UserManager<UserDbEntity> manager, ApplicationDbContext dbContext, IMapper mapper)
+        public UserService(UserManager<UserDbEntity> manager, ApplicationDbContext dbContext, IMapper mapper,
+            IEmailService emailService)
         {
             _manager = manager;
             _dbContext = dbContext;
             _mapper = mapper;
+            _emailService = emailService;
             _notFoundException = new EntityNotFoundException("User");
         }
 
@@ -76,7 +80,11 @@ namespace Zillow.Service.Services.UserServices
 
             var result = await _manager.CreateAsync(createdUser, dto.Password);
 
-            if (result.Succeeded) return createdUser.Id;
+            if (result.Succeeded)
+            {
+                await _emailService.SendEmail(createdUser.Email, "Welcome Email", "");
+                return createdUser.Id;
+            }
 
             var errorsMessage =
                 result.Errors.Aggregate("", (current, error) => current + $"\n{error.Code}");
@@ -95,9 +103,9 @@ namespace Zillow.Service.Services.UserServices
             // Note : We Don't Map (Email) for User , it's unchangeable
             // See MapperProfile Line 63
 
-            if (!id.Equals(dto.Id)) 
+            if (!id.Equals(dto.Id))
                 throw new UpdateEntityException(ExceptionMessage.UpdateEntityIdError);
-            
+
             var updatedUser = _mapper.Map(dto, oldUser);
 
             updatedUser.UpdatedAt = DateTime.Now;

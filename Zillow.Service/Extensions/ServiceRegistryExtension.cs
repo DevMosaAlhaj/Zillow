@@ -4,6 +4,7 @@ using Zillow.Service.Services.AuthServices;
 using Zillow.Service.Services.CategoryServices;
 using Zillow.Service.Services.ContractServices;
 using Zillow.Service.Services.CustomerServices;
+using Zillow.Service.Services.EmailServices;
 using Zillow.Service.Services.FileServices;
 using Zillow.Service.Services.ImageServices;
 using Zillow.Service.Services.NotificationServices;
@@ -34,6 +35,8 @@ namespace Zillow.Service.Extensions
             service.AddScoped<IImageService, ImageService>();
                 
             service.AddSingleton<IFileService,FileService>();
+            
+            service.AddSingleton<IEmailService,EmailService>();
             
             service.AddSingleton<INotificationService,NotificationService>();
             
